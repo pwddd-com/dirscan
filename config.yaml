@@ -1,0 +1,42 @@
+version: 1.0 # 配置文件版本
+enabled: true # 是否开启配置文件配置，开启之后可以简化配置，但是命令行指定的优先级更高
+
+# 扫描对象设置
+scan:
+  protocol:
+    - "http"
+    - "https"
+    - "*"
+  target:
+    - "www.baidu.com"
+    - "10.10.10.10"
+    - "file:/home/root/"
+  language: "php,java" # php . java . *  指定语言之后（php），只扫描php-xxx 字典。
+  dict:
+    - "./dict" # 字典文件位置，支持文件夹
+
+# 显示设置
+view:
+  consoleLog: false # 是否在控制台显示详细信息，如果false则不显示详细信息，只显示结果
+  outputType: json # 支持的显示类型：json、html
+  outputFile: "${timestamp}-result" # 支持自定义文件输出
+  resultPush: false # 是否推送结果到web接口
+  pushUrl: "http://www.pwddd.com/result" # 当result-push为true可用
+
+# 请求设置
+http:
+  http2: false # 是否使用http2
+  proxy: ""   # 使用代理
+  headers:
+    UserAgent:
+      - "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0"
+      - "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0"
+    Cookie: "key=value;key=value"
+    Others:
+      - "Authorization: Bearer aaaaaa"
+  request:  # 清秀相关时间设置
+    timeout: 5 # 最大无响应时间 超时认定为失败 单位s
+    failRetries: 0 # 失败数据包重试次数
+    ignoreStatus: "404,403" # 忽略结果
+    maxQps: 500 # 每秒最大请求数量
+
