@@ -21,6 +21,7 @@ type ViewConfiguration struct {
 	OutputFile string `yaml:"outputFile"`
 	ResultPush bool   `yaml:"resultPush"`
 	PushUrl    string `yaml:"pushUrl"`
+	Out2File   bool   `yaml:"out2File"`
 }
 
 // HeaderConfiguration http设置
@@ -74,15 +75,47 @@ func (configuration *Configuration) getConfiguration() *Configuration {
 	return configuration
 }
 
-var Config Configuration
+var Config *Configuration
 
 func InitConfig() {
 	utils.PInfo("开始读取应用配置文件：config.yaml")
+	Config = new(Configuration)
 	Config.getConfiguration()
 	if Config.Enabled {
 		utils.PInfo("配置加载完成。")
 	} else {
+		Config = nil
 		utils.PWarn("当前系统配置文件为非启用状态，启用请编辑配置文件设置 Enabled 为 true ")
 	}
+}
 
+// SysConfig 系统默认配置
+func SysConfig() {
+	// 默认使用 * 协议
+	Config.Scan.Protocol = append(Config.Scan.Protocol, "*")
+
+	// 默认使用Java语言
+	Config.Scan.Language = append(Config.Scan.Language, "java")
+
+	// 默认开启日志打印，关闭结果推送和输出到文件
+	Config.View.ConsoleLog = true
+	Config.View.ResultPush = false
+	Config.View.Out2File = false
+
+	// 默认关闭Http2 不使用代理 不设置请求头和Cookie
+	Config.Http.Http2 = false
+	Config.Http.Proxy = ""
+	// 默认失败不重试 超时时间5s，一秒钟5个请求
+	Config.Http.Request.FailRetries = 0
+	Config.Http.Request.Timeout = 5
+	Config.Http.Request.MaxQps = 5
+}
+
+func NecessaryParam() {
+	// 判断必要参数是否为空或者不存在
+	// 必要参数包括 扫描目标 字典
+	if len(Config.Scan.Target) == 0 || len(Config.Scan.Dict) == 0 {
+		utils.PError("应用程序缺少必要的参数（扫描目标或者字典），将无法启动，请检查是否指定参数。")
+		os.Exit(0)
+	}
 }

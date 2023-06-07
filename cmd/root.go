@@ -14,8 +14,13 @@ var rootCmd = &cobra.Command{
 	Long:  `This is an Dir Scan CLI for web security.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utils.PInfo("开始解析命令行参数，命令行参数将会覆盖配置文件配置。")
+		if config.Config == nil {
+			config.Config = new(config.Configuration)
+			// 使用系统默认配置
+			config.SysConfig()
+		}
 		initConfigValues(cmd)
-		utils.PInfo("命令行参数解析完成，即将开始扫描。")
+		utils.PInfo("命令行参数解析完成。")
 	},
 }
 
@@ -49,6 +54,7 @@ func initViewValues(cmd *cobra.Command) {
 	viewConfig := config.Config.View
 	output, _ := cmd.Flags().GetString("output")
 	if output != "" {
+		viewConfig.Out2File = true
 		if strings.LastIndex(output, ".") != -1 {
 			viewConfig.OutputFile = output[0:strings.LastIndex(output, ".")]
 			viewConfig.OutputType = output[strings.LastIndex(output, ".")+1:]

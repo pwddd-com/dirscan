@@ -41,7 +41,7 @@ func InitTargets() {
 						if isValidUrl(line) {
 							Targets = append(Targets, line)
 						} else {
-							utils.PWarn("当前文件(" + filePath + ")中，目标 - " + s + " - 非有效地址，已忽略。")
+							utils.PWarn("当前文件 - " + filePath + " - 中，目标 - " + s + " - 非有效地址，已忽略。")
 						}
 					}
 					if err := scanner.Err(); err != nil {
