@@ -1,16 +1,20 @@
 version: 1.0 # 配置文件版本
-enabled: true # 是否开启配置文件配置，开启之后可以简化配置，但是命令行指定的优先级更高
+enabled: false # 是否开启配置文件配置，开启之后可以简化配置，但是命令行指定的优先级更高
 
 # 扫描对象设置
 scan:
   protocol:
     - "http"
-    - "https"
-    - "*"
   target:
     - "www.baidu.com"
     - "10.10.10.10"
-    - "file:/home/root/"
+    - "target"
+    - "http://www.baidu.com:8080"
+    - "https://www.baidu.com"
+    - "http://10.10.1.1:65535"
+    - "https://10.1.1.1"
+    - "target.txt"
+    - "aaa.txt"
   language: "php,java" # php . java . *  指定语言之后（php），只扫描php-xxx 字典。
   dict:
     - "./dict" # 字典文件位置，支持文件夹

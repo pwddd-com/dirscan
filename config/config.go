@@ -1,6 +1,7 @@
 package config
 
 import (
+	"dirscan/utils"
 	"github.com/spf13/viper"
 	"os"
 )
@@ -63,7 +64,7 @@ func (configuration *Configuration) getConfiguration() *Configuration {
 	vip.SetConfigType("yaml")
 
 	if err := vip.ReadInConfig(); err != nil {
-		panic(err)
+		utils.PError("配置读取失败，请检测可执行文件同级目录下是否存在config.yaml")
 	}
 
 	err = vip.Unmarshal(&configuration)
@@ -75,6 +76,13 @@ func (configuration *Configuration) getConfiguration() *Configuration {
 
 var Config Configuration
 
-func init() {
+func InitConfig() {
+	utils.PInfo("开始读取应用配置文件：config.yaml")
 	Config.getConfiguration()
+	if Config.Enabled {
+		utils.PInfo("配置加载完成。")
+	} else {
+		utils.PWarn("当前系统配置文件为非启用状态，启用请编辑配置文件设置 Enabled 为 true ")
+	}
+
 }
