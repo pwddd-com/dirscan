@@ -35,7 +35,7 @@ type RequestConfiguration struct {
 	Timeout      int      `yaml:"timeout"`
 	FailRetries  int      `yaml:"failRetries"`
 	IgnoreStatus []string `yaml:"ignoreStatus"`
-	MaxQps       int      `yaml:"maxQps"`
+	Concurrency  int      `yaml:"concurrency"`
 }
 
 type HttpConfiguration struct {
@@ -105,10 +105,10 @@ func SysConfig() {
 	// 默认关闭Http2 不使用代理 不设置请求头和Cookie
 	Config.Http.Http2 = false
 	Config.Http.Proxy = ""
-	// 默认失败不重试 超时时间5s，一秒钟5个请求
+	// 默认失败不重试 超时时间5s，并发100
 	Config.Http.Request.FailRetries = 0
 	Config.Http.Request.Timeout = 5
-	Config.Http.Request.MaxQps = 5
+	Config.Http.Request.Concurrency = 100
 }
 
 func NecessaryParam() {

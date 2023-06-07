@@ -5,7 +5,6 @@ import (
 	"dirscan/config"
 	"dirscan/utils"
 	"os"
-	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -24,9 +23,9 @@ func InitTargets() {
 	for _, s := range configTarget {
 		if !isValidUrl(s) {
 			// 判断是否为有效文件或者文件夹
-			if isValidFolderOrFile(s) {
+			if utils.IsValidFolderOrFile(s) {
 				// 获取文件列表
-				fileList := getFileList(s)
+				fileList := utils.GetFileList(s)
 				for _, filePath := range fileList {
 					// 获取文件行，判断是否为有效url地址，有效则加入
 					file, err := os.Open(filePath)
@@ -99,34 +98,6 @@ func InitTargets() {
 		}
 	}
 	Targets = hasProtocolUrls
-}
-
-func getFileList(path string) []string {
-	var fileList []string
-	file, _ := os.Stat(path)
-	mode := file.Mode()
-	if mode.IsDir() {
-		// 是文件夹，递归获取文件夹下的全部文件
-		filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
-			if !info.IsDir() { // 如果不是文件夹,是文件,存储文件名
-				fileList = append(fileList, path)
-			}
-			return nil
-		})
-	} else {
-		// 是文件，添加到文件列表
-		fileList = append(fileList, path)
-	}
-
-	return fileList
-}
-
-func isValidFolderOrFile(s string) bool {
-	_, err := os.Stat(s)
-	if err != nil {
-		return false
-	}
-	return true
 }
 
 func isValidUrl(s string) bool {

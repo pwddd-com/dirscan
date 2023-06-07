@@ -81,7 +81,7 @@ func initHttpFlags() {
 	rootCmd.Flags().StringP("cookie", "c", "", "Specify Cookie.")
 	rootCmd.Flags().StringArrayP("ignore-status", "i", nil, "Ignore result status code.")
 	rootCmd.Flags().StringArrayP("header", "", nil, "Add a Header.")
-	rootCmd.Flags().IntP("qps", "q", 0, "Max requests one second.")
+	rootCmd.Flags().IntP("concurrency", "r", 0, "Max requests one second.")
 }
 
 func initHttpValues(cmd *cobra.Command) {
@@ -91,7 +91,7 @@ func initHttpValues(cmd *cobra.Command) {
 	cookie, _ := cmd.Flags().GetString("cookie")
 	ignoreStatus, _ := cmd.Flags().GetStringArray("ignore-status")
 	headers, _ := cmd.Flags().GetStringArray("header")
-	maxQps, _ := cmd.Flags().GetInt("qps")
+	concurrency, _ := cmd.Flags().GetInt("concurrency")
 
 	if proxy != "" {
 		httpConfig.Proxy = proxy
@@ -113,8 +113,8 @@ func initHttpValues(cmd *cobra.Command) {
 		httpConfig.Headers.Others = headers
 	}
 
-	if maxQps != -1 {
-		httpConfig.Request.MaxQps = maxQps
+	if concurrency != -1 {
+		httpConfig.Request.Concurrency = concurrency
 	}
 }
 

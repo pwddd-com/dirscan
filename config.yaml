@@ -17,13 +17,13 @@ scan:
     - "aaa.txt"
   language: "php,java" # php . java . *  指定语言之后（php），只扫描php-xxx 字典。
   dict:
-    - "./dict" # 字典文件位置，支持文件夹
-
+    - "./dict/"
+    - "aaa"
 # 显示设置
 view:
   out2File: false
   consoleLog: false # 是否在控制台显示详细信息，如果false则不显示详细信息，只显示结果
-  outputType: json # 支持的显示类型：json、html
+  outputType: json # 支持的显示类型：json、html、txt
   outputFile: "${timestamp}-result" # 支持自定义文件输出
   resultPush: false # 是否推送结果到web接口
   pushUrl: "http://www.pwddd.com/result" # 当result-push为true可用
@@ -43,5 +43,5 @@ http:
     timeout: 5 # 最大无响应时间 超时认定为失败 单位s
     failRetries: 0 # 失败数据包重试次数
     ignoreStatus: "404,403" # 忽略结果
-    maxQps: 500 # 每秒最大请求数量
+    concurrency: 100 # 并发数
 
